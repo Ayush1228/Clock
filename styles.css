@@ -1,0 +1,233 @@
+/* ---------------------------
+   Polished responsive clock
+   --------------------------- */
+
+:root {
+    --size: 350px;
+    /* outer diameter */
+    --border: calc(var(--size) * 0.034);
+    /* border thickness */
+    --num-offset: 42px;
+    /* distance inward from outer edge for numbers */
+    --radius: calc((var(--size) / 2) - var(--num-offset));
+    /* computed radius for numbers */
+    --bg: #0f0f10;
+    --accent: #ff4d4d;
+}
+
+/* reset & base */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 20% 20%, #181818 0%, #0b0b0c 40%, #070708 100%);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 24px;
+}
+
+/* container */
+.clock-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: min(92vw, 480px);
+}
+
+/* clock shell */
+.clock {
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    position: relative;
+    border: var(--border) solid rgba(255, 255, 255, 0.95);
+    background: linear-gradient(180deg, #2d2d2d 0%, #111 70%);
+    box-shadow:
+        0 0 calc(var(--size) * 0.06) rgba(0, 0, 0, 0.7),
+        inset 0 0 calc(var(--size) * 0.02) rgba(255, 255, 255, 0.02);
+    overflow: visible;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+/* hands - use percentage heights so they scale with clock */
+.hand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: bottom;
+    border-radius: 8px;
+    transform: translateX(-50%) rotate(0deg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* tip visuals:
+   heights are percentages of clock height (from center upwards) */
+.hour {
+    width: calc(var(--size) * 0.025);
+    height: 30%;
+    background: linear-gradient(#fff, #eaeaea);
+    border-radius: 8px;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.06));
+}
+
+.minute {
+    width: calc(var(--size) * 0.018);
+    height: 40%;
+    background: linear-gradient(#f7f7f7, #dcdcdc);
+    border-radius: 8px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.06));
+}
+
+.second {
+    width: calc(var(--size) * 0.01);
+    height: 44%;
+    background: linear-gradient(var(--accent), #ff6b6b);
+    border-radius: 8px;
+    filter: drop-shadow(0 0 12px rgba(255, 77, 77, 0.18));
+}
+
+/* center cap */
+.center {
+    position: absolute;
+    width: calc(var(--size) * 0.044);
+    height: calc(var(--size) * 0.044);
+    background: var(--accent);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 calc(var(--size) * 0.02) rgba(255, 77, 77, 0.6);
+    z-index: 6;
+}
+
+/* numbers container */
+.numbers {
+    position: absolute;
+    inset: 0;
+    /* full */
+    pointer-events: none;
+    z-index: 5;
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+    font-size: calc(var(--size) * 0.075);
+}
+
+/* each number: rotate to angle, move along computed radius, rotate back, then center */
+.number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    /* rotate to angle, translate outward by radius px, rotate back, then offset center by -50% -50% */
+    transform:
+        rotate(calc(30deg * var(--i))) translateY(calc(-1 * var(--radius))) rotate(calc(-30deg * var(--i))) translate(-50%, -50%);
+}
+
+/* inner span ensures text is centered and won't be skewed */
+.number>span {
+    display: inline-block;
+    line-height: 1;
+    padding: 2px 4px;
+}
+
+/* digital clock */
+.digital-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: calc(var(--size) * 0.035) calc(var(--size) * 0.08);
+    border-radius: 14px;
+    color: #f5f5f5;
+    font-size: calc(var(--size) * 0.055);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.02);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    z-index: 10;
+    user-select: none;
+}
+
+/* AM/PM */
+.digital-clock span {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(255, 77, 77, 0.18);
+}
+
+/* hover effects */
+.clock:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        inset 0 0 calc(var(--size) * 0.025) rgba(255, 255, 255, 0.02);
+}
+
+.digital-clock:hover {
+    transform: translateY(-3px) scale(1.02);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65), 0 0 28px rgba(255, 77, 77, 0.06);
+}
+
+/* -----------------------
+   Responsive size tuning
+   ----------------------- */
+
+/* tablets */
+@media (max-width: 768px) {
+    :root {
+        --size: 300px;
+        --num-offset: 36px;
+    }
+
+    .numbers {
+        font-size: calc(var(--size) * 0.068);
+    }
+}
+
+/* small phones */
+@media (max-width: 480px) {
+    :root {
+        --size: 240px;
+        --num-offset: 30px;
+    }
+
+    .numbers {
+        font-size: calc(var(--size) * 0.07);
+    }
+
+    .digital-clock {
+        font-size: calc(var(--size) * 0.056);
+    }
+}
+
+/* very small phones */
+@media (max-width: 320px) {
+    :root {
+        --size: 180px;
+        --num-offset: 24px;
+    }
+
+    .numbers {
+        font-size: calc(var(--size) * 0.075);
+    }
+
+    .digital-clock {
+        font-size: calc(var(--size) * 0.055);
+        padding: 8px 14px;
+    }
+}

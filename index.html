@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Polished Analog + Digital Clock</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="clock-container">
+        <div class="clock" id="clock">
+            <div class="numbers" aria-hidden="true">
+                <div class="number" style="--i:1"><span>1</span></div>
+                <div class="number" style="--i:2"><span>2</span></div>
+                <div class="number" style="--i:3"><span>3</span></div>
+                <div class="number" style="--i:4"><span>4</span></div>
+                <div class="number" style="--i:5"><span>5</span></div>
+                <div class="number" style="--i:6"><span>6</span></div>
+                <div class="number" style="--i:7"><span>7</span></div>
+                <div class="number" style="--i:8"><span>8</span></div>
+                <div class="number" style="--i:9"><span>9</span></div>
+                <div class="number" style="--i:10"><span>10</span></div>
+                <div class="number" style="--i:11"><span>11</span></div>
+                <div class="number" style="--i:12"><span>12</span></div>
+            </div>
+
+            <div class="hand hour" id="hour" aria-hidden="true"></div>
+            <div class="hand minute" id="minute" aria-hidden="true"></div>
+            <div class="hand second" id="second" aria-hidden="true"></div>
+            <div class="center" aria-hidden="true"></div>
+        </div>
+
+        <div class="digital-clock" id="digitalClock" aria-live="polite">00:00:00 <span>AM</span></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
